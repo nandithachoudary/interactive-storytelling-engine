@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "storyVersion": "1.0.0",
+  "id": "derelict-starship",
+  "title": "Echoes of the Void",
+  "author": "Commander T. Vance",
+  "genre": "Science Fiction",
+  "estimatedReadingTime": "8-12 min",
+  "description": "Board a silent deep-space survey vessel trapped in decaying orbit around a volatile pulsar. Manage failing reactor power and life support to uncover the crew's fate.",
+  "startSceneId": "airlock",
+  "variables": {
+    "powerUnits": 3,
+    "hasSecurityKeycard": false,
+    "lifeSupportRestored": false
+  },
+  "scenes": [
+    {
+      "id": "airlock",
+      "title": "Airlock Threshold",
+      "content": "The outer pressure seal clamps shut with a metallic hiss. Amber emergency strobes illuminate a silent, zero-gravity corridor aboard the USS Starlight. Sparks shower from a severed power conduit. Ahead lies the Command Deck, while a service ladder descends to Engineering.",
+      "choices": [
+        {
+          "id": "airlock_to_bridge",
+          "text": "Float along the main corridor toward the Command Deck",
+          "destinationSceneId": "bridge_corridor"
+        },
+        {
+          "id": "airlock_to_engineering",
+          "text": "Descend the maintenance tube into the Reactor Bay",
+          "destinationSceneId": "reactor_bay"
+        }
+      ]
+    },
+    {
+      "id": "bridge_corridor",
+      "title": "Command Access Corridor",
+      "content": "The blast door leading to the Command Bridge is sealed behind an emergency bio-lockout. Floating beside an auxiliary terminal is an officer's jacket with an encrypted security keycard clipped to the collar.",
+      "choices": [
+        {
+          "id": "corridor_take_keycard",
+          "text": "Retrieve the command security keycard",
+          "destinationSceneId": "bridge_corridor_cleared",
+          "condition": {
+            "type": "boolean",
+            "variable": "hasSecurityKeycard",
+            "value": false
+          },
+          "effects": [
+            {
+              "type": "set",
+              "variable": "hasSecurityKeycard",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "corridor_to_engineering",
+          "text": "Head down to the Reactor Bay to inspect power reserves",
+          "destinationSceneId": "reactor_bay"
+        }
+      ]
+    },
+    {
+      "id": "bridge_corridor_cleared",
+      "title": "Command Access Corridor (Access Granted)",
+      "content": "The command keycard chimes softly as you align it with the bulkhead scanner. The heavy blast doors grind open, revealing the panoramic observation bridge.",
+      "choices": [
+        {
+          "id": "cleared_enter_bridge",
+          "text": "Step onto the Command Bridge",
+          "destinationSceneId": "bridge"
+        },
+        {
+          "id": "cleared_to_engineering",
+          "text": "Check Reactor Bay status before initiating flight systems",
+          "destinationSceneId": "reactor_bay"
+        }
+      ]
+    },
+    {
+      "id": "reactor_bay",
+      "title": "Reactor Bay Core",
+      "content": "The antimatter containment sphere hums with a deep, shuddering vibration. Diagnostic screens blink critically: 3 auxiliary power cells remain online. You can route power to stabilize Life Support or overload the Sub-light Thrusters.",
+      "choices": [
+        {
+          "id": "reactor_route_life_support",
+          "text": "Route 1 power unit to restore Environmental Life Support",
+          "destinationSceneId": "reactor_configured",
+          "condition": {
+            "type": "boolean",
+            "variable": "lifeSupportRestored",
+            "value": false
+          },
+          "effects": [
+            {
+              "type": "set",
+              "variable": "lifeSupportRestored",
+              "value": true
+            },
+            {
+              "type": "add",
+              "variable": "powerUnits",
+              "value": -1
+            }
+          ]
+        },
+        {
+          "id": "reactor_overcharge_capacitors",
+          "text": "Siphon auxiliary plasma to supercharge the main engines (+2 Power Units)",
+          "destinationSceneId": "reactor_configured",
+          "effects": [
+            {
+              "type": "add",
+              "variable": "powerUnits",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "reactor_to_corridor",
+          "text": "Ascend to the Command Corridor",
+          "destinationSceneId": "bridge_corridor"
+        }
+      ]
+    },
+    {
+      "id": "reactor_configured",
+      "title": "Reactor Bay (Systems Routed)",
+      "content": "Power relays clunk into their new configurations. Alarms warning of orbital decay intensify—the nearby pulsar's gravitational pull is increasing rapidly. You must reach the bridge immediately.",
+      "choices": [
+        {
+          "id": "configured_to_bridge",
+          "text": "Swipe your security keycard and enter the Command Bridge",
+          "destinationSceneId": "bridge",
+          "condition": {
+            "type": "boolean",
+            "variable": "hasSecurityKeycard",
+            "value": true
+          }
+        },
+        {
+          "id": "configured_to_corridor",
+          "text": "Return to the corridor to find access credentials",
+          "destinationSceneId": "bridge_corridor",
+          "condition": {
+            "type": "boolean",
+            "variable": "hasSecurityKeycard",
+            "value": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "bridge",
+      "title": "Command Bridge",
+      "content": "Through panoramic viewport glass, the blinding violet corona of the pulsar fills the horizon. The central navigation console displays three operational protocols awaiting your final authorization.",
+      "choices": [
+        {
+          "id": "bridge_ignite_sublight",
+          "text": "Fire sub-light thrusters at maximum burn to break orbital decay",
+          "destinationSceneId": "ending_escape",
+          "condition": {
+            "type": "compare",
+            "variable": "powerUnits",
+            "operator": ">=",
+            "value": 4
+          }
+        },
+        {
+          "id": "bridge_broadcast_sos",
+          "text": "Lock into high orbit, seal life-support compartments, and transmit an emergency SOS beacon",
+          "destinationSceneId": "ending_rescue",
+          "condition": {
+            "type": "boolean",
+            "variable": "lifeSupportRestored",
+            "value": true
+          }
+        },
+        {
+          "id": "bridge_launch_pod",
+          "text": "Jettison the primary ship and launch the lone remaining hyper-pod",
+          "destinationSceneId": "ending_pod"
+        }
+      ]
+    },
+    {
+      "id": "ending_escape",
+      "title": "Escape Velocity",
+      "content": "Engine arrays scream to life with immense thrust, tearing the USS Starlight out of the pulsar's gravitational well. As the ship reaches safe open space, you plot a triumphant course back to the Alliance frontier.",
+      "choices": [],
+      "ending": {
+        "id": "ending_warp",
+        "title": "Escape Velocity",
+        "type": "good",
+        "description": "You overclocked the reactor and successfully piloted the starship out of the dying pulsar's grip."
+      }
+    },
+    {
+      "id": "ending_rescue",
+      "title": "Beacon in the Night",
+      "content": "With life support purring steadily, your wide-band tachyonic distress signal reaches an Alliance patrol cutter. Within hours, magnetic docking clamps lock onto your airlock. The ship and its valuable survey data are saved.",
+      "choices": [],
+      "ending": {
+        "id": "ending_beacon",
+        "title": "Rescue at Dawn",
+        "type": "good",
+        "description": "You prioritized life support and maintained station stability until an Alliance rescue fleet arrived."
+      }
+    },
+    {
+      "id": "ending_pod",
+      "title": "Castaway in the Void",
+      "content": "The escape pod shoots into the cold expanse as the Starlight slips into the pulsar's gravity sink. Automated cryo-stasis needles hiss into your arm. You drift into a deep dreamless sleep, confident that someone will one day find your beacon.",
+      "choices": [],
+      "ending": {
+        "id": "ending_survival",
+        "title": "Castaway in the Void",
+        "type": "neutral",
+        "description": "You survived the catastrophic orbital collapse, drifting safely in cryo-stasis."
+      }
+    }
+  ]
+}
+

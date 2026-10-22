@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "storyVersion": "1.0.0",
+  "id": "whispering-woods",
+  "title": "The Heart of Eldoria",
+  "author": "Rowan Silverthorn",
+  "genre": "Fantasy",
+  "estimatedReadingTime": "8-12 min",
+  "description": "An enchanted ancient forest is succumbing to shadow blight. Choose between harvesting a sacred sun relic, waking a dormant stone colossus, or making an ultimate warden sacrifice.",
+  "startSceneId": "glade_crossroads",
+  "variables": {
+    "hasSunstone": false,
+    "guardianTrust": 0
+  },
+  "scenes": [
+    {
+      "id": "glade_crossroads",
+      "title": "The Withered Crossroads",
+      "content": "Silver-barked trees weep violet sap as a creeping blight coils around their roots. You stand as a Warden of the Veil at a fork in the path. To your left, an overgrown brook trickles toward the Sunken Shrine of Dawn. To your right, thorny brambles veil a dormant stone sentinel.",
+      "choices": [
+        {
+          "id": "crossroads_to_shrine",
+          "text": "Follow the stream toward the Sunken Shrine of Dawn",
+          "destinationSceneId": "sunken_shrine"
+        },
+        {
+          "id": "crossroads_to_brambles",
+          "text": "Venture into the thorny Hollow of Brambles",
+          "destinationSceneId": "brambles_hollow"
+        }
+      ]
+    },
+    {
+      "id": "sunken_shrine",
+      "title": "The Sunken Shrine of Dawn",
+      "content": "Partially submerged beneath crystal-clear spring water lies a carved marble lotus. Resting within its petals is the Sunstone of Eldoria, pulsating with warm, golden solar radiance that repels the encroaching gloom.",
+      "choices": [
+        {
+          "id": "shrine_take_sunstone",
+          "text": "Wade into the pool and retrieve the Sunstone",
+          "destinationSceneId": "shrine_cleared",
+          "condition": {
+            "type": "boolean",
+            "variable": "hasSunstone",
+            "value": false
+          },
+          "effects": [
+            {
+              "type": "set",
+              "variable": "hasSunstone",
+              "value": true
+            },
+            {
+              "type": "add",
+              "variable": "guardianTrust",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "shrine_to_brambles",
+          "text": "Leave the waters and explore the Hollow of Brambles",
+          "destinationSceneId": "brambles_hollow"
+        },
+        {
+          "id": "shrine_to_tree",
+          "text": "Hurry directly to the Heart of the World Tree",
+          "destinationSceneId": "world_tree"
+        }
+      ]
+    },
+    {
+      "id": "shrine_cleared",
+      "title": "The Sunken Shrine (Relic Attuned)",
+      "content": "The Sunstone hums warmly in your palm, casting a sphere of sunlight that drives back the creeping purple blight. Ahead, a sun-dappled ridge ascends directly to the World Tree.",
+      "choices": [
+        {
+          "id": "cleared_to_tree",
+          "text": "Ascend toward the World Tree with the Sunstone",
+          "destinationSceneId": "world_tree"
+        },
+        {
+          "id": "cleared_to_brambles",
+          "text": "Cross over to check on the Hollow of Brambles",
+          "destinationSceneId": "brambles_hollow"
+        }
+      ]
+    },
+    {
+      "id": "brambles_hollow",
+      "title": "The Hollow of Brambles",
+      "content": "Tangled thorny vines constrict a moss-covered stone golem. The Sylvan Guardian's carved runic eyes flicker feebly as the shadow-thorns drain its earthen life force.",
+      "choices": [
+        {
+          "id": "brambles_free_guardian",
+          "text": "Draw your warden blade and sever the shadow-vines",
+          "destinationSceneId": "guardian_freed",
+          "effects": [
+            {
+              "type": "add",
+              "variable": "guardianTrust",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "brambles_to_shrine",
+          "text": "Turn toward the Sunken Shrine to seek an ancient relic",
+          "destinationSceneId": "sunken_shrine"
+        },
+        {
+          "id": "brambles_to_tree",
+          "text": "Bypass the stone giant and rush to the World Tree",
+          "destinationSceneId": "world_tree"
+        }
+      ]
+    },
+    {
+      "id": "guardian_freed",
+      "title": "The Awakened Colossus",
+      "content": "With a low grinding of granite, the vines fall away. The Sylvan Guardian rises to its full ten-foot stature, runic symbols glowing emerald green. It bows its massive stone head in gratitude and prepares to follow your command.",
+      "choices": [
+        {
+          "id": "guardian_to_tree",
+          "text": "March alongside the Guardian toward the World Tree",
+          "destinationSceneId": "world_tree"
+        }
+      ]
+    },
+    {
+      "id": "world_tree",
+      "title": "The Heart of the World Tree",
+      "content": "You reach the colossal trunk of the World Tree. Embedded directly into its ancient bark is a jagged obelisk of void crystal, pulsating with malevolent blight. The forest's pulse is growing fainter with every heartbeat.",
+      "choices": [
+        {
+          "id": "tree_channel_sunstone",
+          "text": "Channel the Sunstone's concentrated solar beam into the void crystal",
+          "destinationSceneId": "ending_restoration",
+          "condition": {
+            "type": "boolean",
+            "variable": "hasSunstone",
+            "value": true
+          }
+        },
+        {
+          "id": "tree_command_guardian",
+          "text": "Command the Sylvan Guardian to shatter the obelisk with its granite fists",
+          "destinationSceneId": "ending_guardian",
+          "condition": {
+            "type": "compare",
+            "variable": "guardianTrust",
+            "operator": ">=",
+            "value": 2
+          }
+        },
+        {
+          "id": "tree_warden_sacrifice",
+          "text": "Infuse your own warden soul into the roots to seal the blight in a protective barrier",
+          "destinationSceneId": "ending_sacrifice"
+        }
+      ]
+    },
+    {
+      "id": "ending_restoration",
+      "title": "The Golden Dawn",
+      "content": "Golden rays erupt from the Sunstone, shattering the void crystal into harmless sparkling dust. Pure emerald sap surges through the World Tree, and wildflowers carpet the canopy in vibrant colors. Eldoria is reborn.",
+      "choices": [],
+      "ending": {
+        "id": "ending_dawn",
+        "title": "The Golden Bloom",
+        "type": "good",
+        "description": "You healed Eldoria with the ancient Sunstone, ushering in a brilliant new golden age."
+      }
+    },
+    {
+      "id": "ending_guardian",
+      "title": "Wrath of the Stone Warden",
+      "content": "The Sylvan Guardian charges with a thunderous roar, slamming both fists into the void crystal until it crumbles to ash. The giant kneels before the roots, binding its eternal essence as the vigilant protector of the grove.",
+      "choices": [],
+      "ending": {
+        "id": "ending_sentinel",
+        "title": "The Sylvan Bastion",
+        "type": "good",
+        "description": "Your compassion awakened an ancient ally whose strength liberated the forest."
+      }
+    },
+    {
+      "id": "ending_sacrifice",
+      "title": "The Twilight Slumber",
+      "content": "Without sacred relic or ancient guardian, you place your palms against the bark and channel your own life essence. An amber protective cocoon envelops the heartwood. The blight is frozen in time, and the forest enters a peaceful slumber until a new warden rises.",
+      "choices": [],
+      "ending": {
+        "id": "ending_slumber",
+        "title": "The Warden's Slumber",
+        "type": "neutral",
+        "description": "You halted the corruption through pure devotion, leaving the forest safely dormant."
+      }
+    }
+  ]
+}
+

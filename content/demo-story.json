@@ -1,0 +1,351 @@
+{
+  "schemaVersion": 1,
+  "storyVersion": "1.0.0",
+  "id": "fog-island-mystery",
+  "title": "The Mystery of Fog Island",
+  "author": "Antigravity Detective Agency",
+  "genre": "Mystery",
+  "estimatedReadingTime": "10-15 min",
+  "description": "An interactive mystery on a stormy, isolated island where every choice changes your fate.",
+  "startSceneId": "dock",
+  "variables": {
+    "hasLantern": false,
+    "cluesFound": 0,
+    "hasTreasure": false
+  },
+  "scenes": [
+    {
+      "id": "dock",
+      "title": "The Foggy Pier",
+      "content": "A heavy fog clings to the wooden planks of Blackwood Island's lonely dock. The ferry engine fades into the mist behind you. Before you, a worn wooden sign points toward 'The Shingle Beach', while a steep cliff path winds up toward the 'Old Lighthouse'.",
+      "choices": [
+        {
+          "id": "dock_to_beach",
+          "text": "Inspect the rocky shoreline near the beach",
+          "destinationSceneId": "beach"
+        },
+        {
+          "id": "dock_to_lighthouse",
+          "text": "Climb the cliff path toward the lighthouse",
+          "destinationSceneId": "lighthouse_approach"
+        }
+      ]
+    },
+    {
+      "id": "beach",
+      "title": "The Shingle Beach",
+      "content": "Wet pebbles crunch underfoot. Tucked beneath an overturned wooden dinghy, you spot a sturdy brass storm lantern.",
+      "choices": [
+        {
+          "id": "beach_take_lantern",
+          "text": "Pick up the storm lantern",
+          "destinationSceneId": "beach_cleared",
+          "condition": {
+            "type": "boolean",
+            "variable": "hasLantern",
+            "value": false
+          },
+          "effects": [
+            {
+              "type": "set",
+              "variable": "hasLantern",
+              "value": true
+            },
+            {
+              "type": "add",
+              "variable": "cluesFound",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "beach_to_dock",
+          "text": "Head back to the dock",
+          "destinationSceneId": "dock"
+        }
+      ]
+    },
+    {
+      "id": "beach_cleared",
+      "title": "The Shingle Beach (Searched)",
+      "content": "With the storm lantern now in your hand, the dark shadows around the cliff base seem slightly less menacing. A narrow cave entrance is visible higher up the rocky ridge.",
+      "choices": [
+        {
+          "id": "beach_to_cave",
+          "text": "Venture into the dark cave entrance",
+          "destinationSceneId": "cave",
+          "condition": {
+            "type": "boolean",
+            "variable": "hasLantern",
+            "value": true
+          }
+        },
+        {
+          "id": "beach_to_lighthouse",
+          "text": "Walk up toward the lighthouse",
+          "destinationSceneId": "lighthouse_approach"
+        }
+      ]
+    },
+    {
+      "id": "cave",
+      "title": "Whispering Caves",
+      "content": "The lantern casts dancing shadows across wet limestone walls. Deep inside, you uncover an abandoned smuggler's camp. A captain's sea chest sits on a makeshift desk, and behind a curtain of stalagmites rests an ironbound strongbox.",
+      "choices": [
+        {
+          "id": "cave_read_log",
+          "text": "Study the suspicious logbook entries on the desk",
+          "destinationSceneId": "cave_studied",
+          "effects": [
+            {
+              "type": "add",
+              "variable": "cluesFound",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "cave_search_strongbox",
+          "text": "Pry open the ironbound strongbox in the alcove",
+          "destinationSceneId": "cave_treasure",
+          "condition": {
+            "type": "boolean",
+            "variable": "hasTreasure",
+            "value": false
+          },
+          "effects": [
+            {
+              "type": "set",
+              "variable": "hasTreasure",
+              "value": true
+            },
+            {
+              "type": "add",
+              "variable": "cluesFound",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "cave_exit",
+          "text": "Leave the cave and hurry to the lighthouse",
+          "destinationSceneId": "lighthouse_approach"
+        }
+      ]
+    },
+    {
+      "id": "cave_treasure",
+      "title": "The Smuggler's Strongbox",
+      "content": "Inside the strongbox is an ornate collection of stolen coastal merchant silver stamped with the keeper's personal family crest! Whoever lured ships onto the rocks was hoarding the salvage right here.",
+      "choices": [
+        {
+          "id": "treasure_read_log",
+          "text": "Examine the ship logbook on the desk",
+          "destinationSceneId": "cave_studied",
+          "condition": {
+            "type": "compare",
+            "variable": "cluesFound",
+            "operator": "<",
+            "value": 3
+          },
+          "effects": [
+            {
+              "type": "add",
+              "variable": "cluesFound",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "treasure_to_lighthouse",
+          "text": "Pocket the evidence and climb the path to the lighthouse",
+          "destinationSceneId": "lighthouse_approach"
+        }
+      ]
+    },
+    {
+      "id": "cave_studied",
+      "title": "The Smuggler's Clue",
+      "content": "The handwriting in the captain's log matches the official maintenance ledger from the island lighthouse! The wreckages were deliberate sabotage.",
+      "choices": [
+        {
+          "id": "studied_search_strongbox",
+          "text": "Pry open the ironbound strongbox in the shadowy alcove",
+          "destinationSceneId": "cave_treasure",
+          "condition": {
+            "type": "boolean",
+            "variable": "hasTreasure",
+            "value": false
+          },
+          "effects": [
+            {
+              "type": "set",
+              "variable": "hasTreasure",
+              "value": true
+            },
+            {
+              "type": "add",
+              "variable": "cluesFound",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "studied_to_lighthouse",
+          "text": "Confront the keeper at the lighthouse",
+          "destinationSceneId": "lighthouse_interior"
+        }
+      ]
+    },
+    {
+      "id": "lighthouse_approach",
+      "title": "The Lighthouse Footpath",
+      "content": "Wind howls around the cliffside tower. Yellow light filters through the rain-streaked windows. The entrance door sits slightly ajar, while an observation catwalk overlooks the reef below.",
+      "choices": [
+        {
+          "id": "approach_enter",
+          "text": "Push open the heavy door and step inside",
+          "destinationSceneId": "lighthouse_interior"
+        },
+        {
+          "id": "approach_inspect_catwalk",
+          "text": "Inspect the reef lookout before entering",
+          "destinationSceneId": "lighthouse_lookout",
+          "effects": [
+            {
+              "type": "add",
+              "variable": "cluesFound",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "approach_to_beach",
+          "text": "Return to the beach below",
+          "destinationSceneId": "beach"
+        }
+      ]
+    },
+    {
+      "id": "lighthouse_lookout",
+      "title": "The Reef Overlook",
+      "content": "From the catwalk, you observe a mirror apparatus rigged to deflect the warning beam away from the jagged reef shoals! Even without written logs, the physical sabotage is plain to see.",
+      "choices": [
+        {
+          "id": "lookout_enter",
+          "text": "Step inside the keeper's quarters with your observations",
+          "destinationSceneId": "lighthouse_interior"
+        }
+      ]
+    },
+    {
+      "id": "lighthouse_interior",
+      "title": "Lighthouse Keeper's Quarters",
+      "content": "An elderly keeper in a rain slicker turns around sharply. His eyes dart toward the spiral staircase leading up to the beacon. 'Visitors aren't supposed to be on Blackwood Island tonight,' he mutters coldly.",
+      "choices": [
+        {
+          "id": "confront_keeper_evidence",
+          "text": "Present the logbook evidence and accuse him of intentionally wrecking ships",
+          "destinationSceneId": "ending_solved",
+          "condition": {
+            "type": "compare",
+            "variable": "cluesFound",
+            "operator": ">=",
+            "value": 3
+          }
+        },
+        {
+          "id": "confront_keeper_treasure",
+          "text": "Place the stolen family silver on the table and demand an explanation",
+          "destinationSceneId": "ending_treasure_restitution",
+          "condition": {
+            "type": "boolean",
+            "variable": "hasTreasure",
+            "value": true
+          }
+        },
+        {
+          "id": "inspect_beacon_mechanism",
+          "text": "Offer to help inspect and restore the malfunctioning beacon light for tonight's gale",
+          "destinationSceneId": "ending_beacon_restored"
+        },
+        {
+          "id": "confront_keeper_unprepared",
+          "text": "Accuse him outright without concrete proof",
+          "destinationSceneId": "ending_captured",
+          "condition": {
+            "type": "compare",
+            "variable": "cluesFound",
+            "operator": "<",
+            "value": 3
+          }
+        },
+        {
+          "id": "ask_shelter",
+          "text": "Keep quiet about the mystery and politely ask for shelter until morning",
+          "destinationSceneId": "ending_stranded"
+        }
+      ]
+    },
+    {
+      "id": "ending_solved",
+      "title": "Justice in the Tempest",
+      "content": "Faced with the undeniable evidence in the logbook, the keeper confesses. You secure the beacon, restore the warning light, and radio the authorities at sunrise.",
+      "choices": [],
+      "ending": {
+        "id": "ending_truth",
+        "title": "The Mastermind Exposed",
+        "type": "good",
+        "description": "You gathered decisive proof and solved the island mystery."
+      }
+    },
+    {
+      "id": "ending_treasure_restitution",
+      "title": "The Stolen Silver Exposed",
+      "content": "Seeing his own engraved silver laid upon the table, the keeper breaks down in remorse. He surrenders the lighthouse keys, agrees to restore the beacon, and pledges full restitution to the merchant families.",
+      "choices": [],
+      "ending": {
+        "id": "ending_restitution",
+        "title": "The Smuggler's Silver Recovered",
+        "type": "good",
+        "description": "You uncovered the stolen silver treasure and brought about a peaceful, just confession."
+      }
+    },
+    {
+      "id": "ending_beacon_restored",
+      "title": "Guardian of the Beacon",
+      "content": "Putting suspicions aside, you scale the tower together and realign the shattered focal lenses. As the warning beam cuts through the storm, the midnight freighter passes safely. You kept watch until dawn, saving dozens of lives.",
+      "choices": [],
+      "ending": {
+        "id": "ending_safe_beacon",
+        "title": "The Beacon Restored",
+        "type": "good",
+        "description": "You prioritized saving lives during the tempest, guiding the ships safely through the shoals."
+      }
+    },
+    {
+      "id": "ending_captured",
+      "title": "Trapped in the Tower",
+      "content": "Without proof, the keeper easily brushes aside your accusations. He knocks your lantern away, locks you inside the storm cellar, and flees into the storm.",
+      "choices": [],
+      "ending": {
+        "id": "ending_locked",
+        "title": "Silenced in the Dark",
+        "type": "bad",
+        "description": "Accusing without evidence left you vulnerable."
+      }
+    },
+    {
+      "id": "ending_stranded",
+      "title": "Ferry at Dawn",
+      "content": "The keeper suspiciously lets you wait out the storm by the hearth. When the dawn ferry returns, you leave Blackwood Island with the truth still buried in the fog.",
+      "choices": [],
+      "ending": {
+        "id": "ending_escape",
+        "title": "The Unsolved Fog",
+        "type": "neutral",
+        "description": "You survived the night, but the mystery remains unsolved."
+      }
+    }
+  ]
+}
