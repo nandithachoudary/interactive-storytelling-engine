@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Interactive Storytelling Engine
+
+A branching interactive storytelling platform built with Next.js, React, TypeScript, and Tailwind CSS. Explore stories, make choices that influence what happens next, discover different endings, and revisit earlier decisions.
+
+## Features
+
+- **Interactive branching stories** with choices that lead to different scenes and endings.
+- **Reusable story engine** supporting conditional choices, state-dependent branches, and story progression.
+- **Undo and replay** to revisit decisions and explore alternative paths.
+- **Progress persistence** using browser local storage, with story-specific progress restoration.
+- **Ending discovery** to track the endings you have reached.
+- **Story library** with searchable stories and genre filters.
+- **Story validation** to detect invalid scene references, unreachable scenes, and structural issues.
+- **Automated tests** covering the engine, validation, state management, persistence, and player flows.
+
+## Tech Stack
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Zod
+- Vitest
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+Install [Node.js](https://nodejs.org/) and npm.
+
+### Installation
+
+Clone the repository and enter the project directory:
+
+```bash
+git clone https://github.com/nandithachoudary/interactive-storytelling-engine.git
+cd interactive-storytelling-engine
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Running Tests
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Run the automated test suite:
 
-## Learn More
+```bash
+npm test
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Production Build
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create a production build:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run build
+```
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `app/` — Next.js pages and application layout.
+- `components/` — Story library, story details, and story player UI.
+- `content/` — JSON story definitions.
+- `engine/` — Story schema, runtime, state, history, conditions, and validation.
+- `lib/` — Story library utilities and progress persistence.
+- `public/` — Static assets.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Adding Stories
+
+Story content is stored as JSON files in the `content/` directory. Story definitions are validated against the engine's schema and graph validation rules.
+
+## License
+
+No license has been specified yet.
